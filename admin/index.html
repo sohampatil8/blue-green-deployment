@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Soham Patil - DevOps Engineer Resume" />
+    <title>Soham Patil | DevOps Engineer</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #e6e6e6;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      li {
+        list-style: none;
+      }
+
+      ul {
+        padding-left: 0;
+        margin: 5px 0;
+      }
+
+      .page {
+        width: 1000px;
+        margin: 20px auto;
+        background: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      /* must be explicit — html2canvas won't inherit from .page */
+      main#page {
+        background: #ffffff;
+        width: 1000px;
+      }
+
+      .print-btn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #f39c12;
+        color: white;
+        border: none;
+        padding: 12px 18px;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 5px;
+        z-index: 999;
+        transition: background 0.2s ease;
+      }
+
+      .print-btn:hover {
+        background: #d68910;
+      }
+
+      .print-btn:disabled {
+        background: #aaa;
+        cursor: not-allowed;
+      }
+
+      .manage-btn {
+        position: fixed;
+        top: 20px;
+        right: 168px;
+        background: #3d3d3f;
+        color: white;
+        border: none;
+        padding: 12px 18px;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 5px;
+        z-index: 999;
+        text-decoration: none;
+        transition: background 0.2s ease;
+        display: inline-block;
+      }
+
+      .manage-btn:hover {
+        background: #555;
+      }
+
+      /* TOP SECTION */
+      .top {
+        background: #3d3d3f;
+        color: white;
+        padding: 40px;
+        display: flex;
+      }
+
+      .profile {
+        width: 30%;
+        text-align: center;
+      }
+
+      .circle {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        border: 5px solid #f39c12;
+        margin: auto;
+        background: #ccc;
+        overflow: hidden;
+      }
+
+      .circle img {
+        display: block;
+        width: 180px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      .contact {
+        margin-top: 30px;
+        text-align: left;
+      }
+
+      .contact h3 {
+        border-bottom: 2px solid #f39c12;
+        padding-bottom: 5px;
+      }
+
+      .contact p {
+        margin: 8px 0;
+      }
+
+      .right-top {
+        width: 70%;
+        padding-left: 40px;
+      }
+
+      .name {
+        font-size: 48px;
+        font-weight: bold;
+      }
+
+      .role {
+        color: #f39c12;
+        margin-top: 10px;
+        letter-spacing: 2px;
+      }
+
+      .about {
+        margin-top: 40px;
+      }
+
+      .about h3 {
+        border-bottom: 2px solid #f39c12;
+        padding-bottom: 5px;
+      }
+
+      .about p {
+        line-height: 1.6;
+      }
+
+      /* DIVIDER */
+      .divider {
+        height: 5px;
+        background: #f39c12;
+      }
+
+      /* MAIN SECTION */
+      .main {
+        display: flex;
+        padding: 40px;
+      }
+
+      /* LEFT COLUMN */
+      .left {
+        width: 40%;
+      }
+
+      .section {
+        margin-bottom: 30px;
+      }
+
+      .section h3 {
+        border-bottom: 2px solid #f39c12;
+        padding-bottom: 5px;
+      }
+
+      .section p {
+        margin: 5px 0;
+      }
+
+      /* SKILLS BAR */
+      .skill {
+        margin: 10px 0;
+      }
+
+      .bar {
+        height: 8px;
+        background: #ccc;
+        position: relative;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .bar span {
+        display: block;
+        height: 100%;
+        background: #f39c12;
+        border-radius: 4px;
+      }
+
+      /* RIGHT COLUMN */
+      .right {
+        width: 60%;
+        padding-left: 40px;
+      }
+
+      .timeline {
+        border-left: 3px solid #f39c12;
+        padding-left: 20px;
+      }
+
+      .item {
+        margin-bottom: 30px;
+        position: relative;
+      }
+
+      .item::before {
+        content: "";
+        width: 12px;
+        height: 12px;
+        background: #f39c12;
+        border-radius: 50%;
+        position: absolute;
+        left: -27px;
+        top: 5px;
+      }
+
+      /* PRINT */
+      @media print {
+        .print-btn,
+        .manage-btn {
+          display: none;
+        }
+
+        body {
+          background: none;
+        }
+
+        .page {
+          box-shadow: none;
+          margin: 0;
+          width: 100%;
+        }
+
+        .item,
+        .section,
+        .skill {
+          page-break-inside: avoid;
+          break-inside: avoid;
+        }
+      }
+    </style>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      function downloadPDF() {
+        const element = document.getElementById("page");
+        const btn = document.querySelector(".print-btn");
+        btn.textContent = "Generating...";
+        btn.disabled = true;
+
+        const name = window._resumeName || "Resume";
+
+        // 1000px ÷ 96dpi = 10.42in (exact content width, no side margins)
+        // Height kept at A3 (16.54in) — content always fits on one page
+        html2pdf()
+          .set({
+            margin: 0,
+            filename: name + "_Resume.pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: "in", format: [10.42, 16.54], orientation: "portrait" },
+          })
+          .from(element)
+          .save()
+          .then(() => {
+            btn.textContent = "Download PDF";
+            btn.disabled = false;
+          });
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="page">
+      <main id="page">
+        <!-- TOP -->
+        <div class="top">
+          <div class="profile">
+            <div class="circle">
+              <img id="r-photo" src="" alt="Profile photo" width="180" height="180" />
+            </div>
+            <div class="contact">
+              <h3>CONTACT</h3>
+              <p id="r-phone"></p>
+              <p id="r-email"></p>
+              <a id="r-linkedin" href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              &nbsp;|&nbsp;
+              <a id="r-github" href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+          </div>
+
+          <div class="right-top">
+            <div class="name" id="r-name"></div>
+            <div class="role" id="r-role"></div>
+            <div class="about">
+              <h3>ABOUT ME</h3>
+              <p id="r-about"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- MAIN -->
+        <div class="main">
+          <!-- LEFT -->
+          <div class="left">
+            <div class="section">
+              <h3>EDUCATION</h3>
+              <div id="r-education"></div>
+            </div>
+
+            <div class="section">
+              <h3>EXPERTISE</h3>
+              <div id="r-expertise"></div>
+            </div>
+
+            <div class="section">
+              <h3>PERSONAL INFORMATION</h3>
+              <div id="r-personal"></div>
+            </div>
+
+            <div class="section">
+              <h3>LANGUAGES</h3>
+              <div id="r-languages"></div>
+            </div>
+          </div>
+
+          <!-- RIGHT -->
+          <div class="right">
+            <div class="section">
+              <h3>EXPERIENCE</h3>
+              <div class="timeline" id="r-experience"></div>
+            </div>
+
+            <div class="section">
+              <h3>SOFTWARE SKILLS</h3>
+              <div id="r-skills"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <a href="admin.html" class="manage-btn">Manage Resume</a>
+    <button class="print-btn" onclick="downloadPDF()">Download PDF</button>
+
+    <script>
+      const DEFAULT_DATA = {
+        name: "SOHAM PATIL",
+        role: "DEVOPS ENGINEER",
+        phone: "+91 9867256690",
+        email: "sohamsatyajitpatil@email.com",
+        linkedin: "https://www.linkedin.com/in/soham-patil-58b966282/",
+        github: "https://github.com/sohampatil8",
+        photo: "https://avatars.githubusercontent.com/u/166801115?v=4",
+        about:
+          "DevOps Engineer with hands-on experience in AWS, automation and containerization. Skilled in building CI/CD pipelines, managing cloud infrastructure, and improving system reliability. Strong background in Linux, scripting (PowerShell & Bash), and infrastructure automation to reduce costs and enhance performance.",
+        education: [
+          { years: "2020–2023", degree: "Bachelor of Management Studies (IT)", institution: "University of Mumbai" },
+          { years: "2018–2020", degree: "Higher Secondary Education (IT)", institution: "University of Mumbai" },
+          { years: "2016–2017", degree: "CBSE", institution: "" },
+        ],
+        expertise: ["Creativity", "Responsibility", "Communication", "Time Management", "Teamwork", "Motivation", "Organization"],
+        personal: { dob: "08 February 2001", gender: "Male", marital: "Unmarried" },
+        languages: ["English", "Hindi", "Marathi"],
+        experience: [
+          {
+            period: "Dec 2024 – Present",
+            position: "Junior Engineer",
+            company: "TechVits Pvt Ltd / Mumbai",
+            bullets: [
+              "Automated infrastructure and deployment workflows using PowerShell and Linux scripting.",
+              "Collected hardware and network interface data from systems and stored in PostgreSQL & MSSQL.",
+              "Improved deployment efficiency and reduced manual effort through automation.",
+              "Worked on VMware environments for system monitoring and management.",
+            ],
+          },
+          {
+            period: "Jan 2024 – Dec 2024",
+            position: "DevOps Engineer Intern",
+            company: "HisanLabs Pvt Ltd / Pune",
+            bullets: [
+              "Built and maintained CI/CD pipelines using Jenkins.",
+              "Containerized applications using Docker for consistent deployments.",
+              "Assisted in provisioning cloud infrastructure using AWS services.",
+              "Improved system reliability and deployment speed.",
+            ],
+          },
+        ],
+        skills: [
+          { name: "Docker", level: 85 },
+          { name: "Kubernetes", level: 80 },
+          { name: "Terraform", level: 80 },
+          { name: "Jenkins", level: 80 },
+          { name: "Ansible", level: 75 },
+          { name: "Git", level: 85 },
+          { name: "AWS — EC2, S3, RDS, EKS, Route53", level: 75 },
+          { name: "Azure — VMs, Blob Storage, Azure DevOps", level: 75 },
+          { name: "Linux", level: 85 },
+          { name: "Scripting — PowerShell & Bash", level: 80 },
+        ],
+      };
+
+      function getData() {
+        try {
+          const s = localStorage.getItem("resumeData");
+          return s ? JSON.parse(s) : DEFAULT_DATA;
+        } catch {
+          return DEFAULT_DATA;
+        }
+      }
+
+      function renderResume() {
+        const d = getData();
+
+        document.getElementById("r-name").textContent = d.name;
+        document.getElementById("r-role").textContent = d.role;
+        document.getElementById("r-about").textContent = d.about;
+        document.getElementById("r-phone").textContent = d.phone;
+        document.getElementById("r-email").textContent = d.email;
+
+        const imgEl = document.getElementById("r-photo");
+        imgEl.src = d.photo;
+        imgEl.alt = d.name + " profile photo";
+
+        document.getElementById("r-linkedin").href = d.linkedin;
+        document.getElementById("r-github").href = d.github;
+
+        document.title = d.name + " | " + d.role;
+        window._resumeName = d.name.replace(/\s+/g, "_");
+        window._resumePhoto = d.photo;
+
+        document.getElementById("r-education").innerHTML = d.education
+          .map((e) => `
+            <p><b>${e.years}</b></p>
+            <p>${e.degree}</p>
+            ${e.institution ? `<p>${e.institution}</p>` : ""}
+            <br/>
+          `).join("");
+
+        document.getElementById("r-expertise").innerHTML = d.expertise
+          .map((s) => `<p>• ${s}</p>`).join("");
+
+        const p = d.personal;
+        document.getElementById("r-personal").innerHTML = `
+          <p>Date of Birth: ${p.dob}</p>
+          <p>Gender: ${p.gender}</p>
+          <p>Marital Status: ${p.marital}</p>
+        `;
+
+        document.getElementById("r-languages").innerHTML = d.languages
+          .map((l) => `<p>• ${l}</p>`).join("");
+
+        document.getElementById("r-experience").innerHTML = d.experience
+          .map((e) => `
+            <div class="item">
+              <p><b>${e.period}</b></p>
+              <p><b>${e.position}</b></p>
+              <p>${e.company}</p>
+              <ul>${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>
+            </div>
+          `).join("");
+
+        document.getElementById("r-skills").innerHTML = d.skills
+          .map((s) => `
+            <div class="skill">
+              ${s.name}
+              <div class="bar"><span style="width:${s.level}%"></span></div>
+            </div>
+          `).join("");
+      }
+
+      document.addEventListener("DOMContentLoaded", renderResume);
+    </script>
+  </body>
+</html>
