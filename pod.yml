@@ -1,0 +1,25 @@
+kind: pod
+apiVersion: v1
+metadata:
+  name: pod1
+  labels:
+    app: v1
+spec:
+  containers:
+    - name: ubuntu
+      image: ubuntu:latest
+      ports:
+        - containerPort: 80
+          protocol: TCP
+    - name: database
+      image: mysql:latest
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          valuefrom:
+            secretKeyRef:
+              name: mysql_password
+              key: MYSQL_ROOT_PASSWORD #kubectl create secrete --from-literal=MYSQL_ROOT_PASSWORD="Pass@123"
+
+      ports:
+        - containerPort: 3306
+          protocol: TCP

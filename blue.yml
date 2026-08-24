@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-deployment
+  namespace: UAT
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+      name: blue
+  template:
+    metadata:
+      labels:
+        app: myapp
+        name: blue
+    spec:
+      containers:
+        - name: myapp
+          image: sohampatil08/blue-green-deployment
+          ports:
+            - containerPort: 80
+              protocol: TCP
+
+          readinessProbe:
+            httpGet:
+            path: /
+            port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+          livenessProbe:
+            httpGet:
+            path: /
+            port: 80
+            initialDelaySeconds: 20
+            periodSeconds: 10

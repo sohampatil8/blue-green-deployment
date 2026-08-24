@@ -1,0 +1,81 @@
+pipeline {
+
+    agent any
+
+    environment {
+        IMAGE = "sohampatil08/picnic-app"
+        CONTAINER = "picnic-blue"
+        PORT = "80"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/sohampatil08/blue-green-deployment.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                    docker build \
+                        -t $IMAGE:$BUILD_NUMBER \
+                        -t $IMAGE:blue \
+                        .
+                '''
+            }
+        }
+
+        stage('Docker push Image') {
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                sh 'docker push $IMAGE:$BUILD_NUMBER'
+                }
+            }
+        }
+
+        // stage('Push Image') {
+        //     steps {
+        //         sh '''
+        //             docker push $IMAGE:$BUILD_NUMBER
+        //             docker push $IMAGE:latest
+        //         '''
+        //     }
+        // }
+
+        stage('Deploy Blue') {
+            steps {
+                sh '''
+                    docker rm -f $CONTAINER || true
+
+                    docker run -d \
+                        --name $CONTAINER \
+                        -p $PORT:80 \
+                        $IMAGE:$BUILD_NUMBER
+                '''
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                sh '''
+                    sleep 5
+                    docker ps --filter "name=$CONTAINER"
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Blue deployment successful!'
+        }
+
+        failure {
+            echo 'Blue deployment failed!'
+        }
+    }
+}

@@ -1,0 +1,100 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE = "sohampatil08/myapp"
+        BLUE = "myapp-blue"
+        GREEN = "myapp-green"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/your-user/your-repo.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                    docker build -t $IMAGE:$BUILD_NUMBER .
+                    docker tag $IMAGE:$BUILD_NUMBER $IMAGE:green
+                '''
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )
+                ]) {
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login \
+                            -u "$DOCKER_USER" --password-stdin
+
+                        docker push $IMAGE:$BUILD_NUMBER
+                        docker push $IMAGE:green
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy Green') {
+            steps {
+                sh '''
+                    docker rm -f $GREEN || true
+
+                    docker run -d \
+                        --name $GREEN \
+                        --network app-network \
+                        -p 8082:80 \
+                        $IMAGE:green
+                '''
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+                sh '''
+                    sleep 10
+
+                    curl --fail http://localhost:8082
+                '''
+            }
+        }
+
+        stage('Switch Traffic') {
+            steps {
+                sh '''
+                    echo "Switching traffic from BLUE to GREEN"
+                    
+                    # Update reverse proxy here
+                    # nginx → green:8082
+                '''
+            }
+        }
+
+        stage('Remove Blue') {
+            steps {
+                sh '''
+                    docker rm -f $BLUE || true
+                '''
+            }
+        }
+    }
+
+    post {
+        failure {
+            sh '''
+                docker rm -f $GREEN || true
+                echo "Green deployment failed. Blue remains active."
+            '''
+        }
+    }
+}
