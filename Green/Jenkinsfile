@@ -4,8 +4,8 @@ pipeline {
     environment {
         APP_DIR  = "./Green"
         IMAGE    = "sohampatil08/picnic-app"
-        BLUE_CONTAINER  = "picnic-Blue"
-        GREEN_CONTAINER = "picnic-Green"
+        BLUE_CONTAINER  = "picnic-blue"
+        GREEN_CONTAINER = "picnic-green"
         BLUE_PORT       = "8081"
         GREEN_PORT      = "8082"
     }
