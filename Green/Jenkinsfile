@@ -11,14 +11,14 @@ pipeline {
     }
 
     stages {
-        stage 'checkout' {
+        stage ('checkout') {
             steps {
                     git branch: 'main',
                     url: 'https://github.com/sohampatil8/blue-green-deployment.git'
             }
         }
 
-        stage 'Build Docker Image' {
+        stage ('Build Docker Image') {
             steps {
                 sh '''
                     echo "Building Docker image..."
@@ -31,7 +31,7 @@ pipeline {
             }
         }
 
-        stage 'Docker Login & Push Image' {
+        stage ('Docker Login & Push Image') {
             steps {
                 withCredentials([
                     usernamePassword(
