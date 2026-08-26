@@ -1,5 +1,5 @@
 FROM nginx:alpine
 
-COPY ./* /usr/share/nginx/html
+COPY ./picnic.html /usr/share/nginx/html/index.html
 
 EXPOSE 8082
